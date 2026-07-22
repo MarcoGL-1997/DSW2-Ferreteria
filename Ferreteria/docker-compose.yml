@@ -63,6 +63,31 @@ services:
     networks:
       - ferreteria-network
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2
+    container_name: keycloak
+    ports:
+      - "8083:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin123
+
+      KC_DB: mysql
+      KC_DB_URL: jdbc:mysql://host.docker.internal:3306/keycloak
+      KC_DB_USERNAME: root
+      KC_DB_PASSWORD: 123456
+
+    command:
+      - start-dev
+
+    restart: unless-stopped
+
+    depends_on:
+      - gateway-server
+
+    networks:
+      - ferreteria-network
+
 networks:
   ferreteria-network:
     driver: bridge
